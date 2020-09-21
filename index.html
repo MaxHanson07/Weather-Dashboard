@@ -1,15 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Bootstrap Link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- Stylesheet link -->
     <link rel="stylesheet" href="style.css">
 
     <title>Weather Dashboard</title>
 </head>
+
 <body>
-    
+    <header class="header">
+        <h1 id="weather-dashboard">Weather Dashboard</h1>
+    </header>
+    <!-- Create page layout using bootstrap-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 search-side">
+                <!-- <div class="row searchbar"></div> -->
+                <form id="searchbar">
+                    <label id="search-label" for="city-input">Search for a city</label>
+                    <input type="text" id="city-input"><br>
+                </form>
+                <div class="row search-history"></div>
+            </div>
+            <div class="col-md-9 weather-display-side">
+                <div class="row current-forecast"></div>
+                <div class="row five-day-forecast"></div>
+            </div>
+
+        </div>
+
+    </div>
+
     <script src="script.js"></script>
 </body>
+
 </html>
