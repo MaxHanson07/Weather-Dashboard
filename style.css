@@ -1,3 +1,23 @@
-body {
-    background-color: salmon;
+/* Page header */
+.header {
+    background-color: black;
+    padding: 5px;
+}
+
+/* Page title in header */
+#weather-dashboard {
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+/* Searchbar where user enters city */
+#searchbar {
+    padding: 5px 2px;
+}
+
+/* Label of city search bar */
+#search-label {
+    font-size: 20px;
+    font-weight: bold;
 }
