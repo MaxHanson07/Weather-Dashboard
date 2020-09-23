@@ -30,10 +30,16 @@ $("#search-button").on("click", function (event) {
         today = mm + '/' + dd + '/' + yyyy;
 
         // Get weather icon
-        // var weatherIcon = response.weather.0.icon;
+        var weatherIcon = $("<img>").attr("src", "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
+        // wf += "<img src='https://openweathermap.org/img/w/" + val.weather[0].icon + ".png'>" // Icon
+
+
+        newRow = $("<div>").attr("class", "row")
+        newDiv.append(newRow);
 
         var cityAndDate = $("<h2>").text(cityName + " " + today)
-        newDiv.append(cityAndDate);
+        newRow.append(cityAndDate);
+        newRow.append(weatherIcon);
 
         // Get temperature and convert it to Farenheit from Kelvin
         var temp = response.main.temp;
@@ -67,6 +73,12 @@ $("#search-button").on("click", function (event) {
             var uvEl = $("<p>").text("UV index: " + uvIndex);
             newDiv.append(uvEl);
 
+            // give color to index
+            // if (uvIndex < 5)
+            // {
+            //     attr.class
+            // }
+
         })
 
         $(".current-forecast").append(newDiv);
@@ -79,69 +91,51 @@ $("#search-button").on("click", function (event) {
     $.ajax({
         url: queryURL,
         method: "GET"
-    }).then(function (response) {
+    }).then(function(data) {
 
+        
         // Create div to hold all attributes of today's forecast
         var newDivFive = $("<div>");
-        $("#five-day-forecast").append(newDivFive);
-
+    
         var fiveDay = $("<h2>").text("5-Day Forecast");
 
         newDivFive.append(fiveDay);
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 3; i < 36; i += 8) {
             // Div representing each day
             var dayHolder = $("<div>")
 
-            console.log(response);
-
+            console.log(data)
+            
             // Get date
 
             // Get temperature and convert it to Farenheit from Kelvin
-            var tempFive = response.list.i.main.temp;
+            var tempFive = data.list[i].main.temp;
             tempFive = ((tempFive - 273.15) * 1.80 + 32).toFixed(1);
 
             var tempElFive = $("<p>").text("Temperature: " + tempFive + " °F")
             dayHolder.append(tempElFive);
 
             // Get humidity
-            var humidityFive = response.list.i.main.humidity;
+            var humidityFive = data.list[i].main.humidity;
             var humidityElFive = $("<p>").text("Humidity: " + humidityFive);
             dayHolder.append(humidityElFive);
+            console.log(humidityFive)
 
             // Get wind speed
-            var windSpeedFive = response.list.i.wind.speed;
+            var windSpeedFive = data.list[i].wind.speed;
             var windElFive = $("<p>").text("Wind Speed: " + windSpeedFive + " MPH");
             dayHolder.append(windElFive);
+
+            newDivFive.append(dayHolder);
 
             // Get weather icon
             // var weatherIcon = response.weather.0.icon;
         }
 
-        newDivFive.append(dayHolder);
-
-
-
-
-
-
-
-
-
-
+        $("#five-day-forecast").append(newDivFive);
 
     })
-
-
-
-
-
-
-
-
-
-
-
 
 })
 
