@@ -1,5 +1,4 @@
 // Takes user input "city" and makes ajax call to weather api for both current conditions and 5-day forecast
-
 $("#search-button").on("click", function (event) {
     event.preventDefault();
     // This line of code will grab the input from the textbox
@@ -8,24 +7,140 @@ $("#search-button").on("click", function (event) {
 
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=29f5bb53f0ad45eaf4e2242330886d7f";
 
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function (response) {
+
+        // Display city name, date, weather condition icon, temperature, humidity, wind speed, and uv index in .current-forecast
+        // Must create elements
+
+        // Create div to hold all attributes of today's forecast
+        var newDiv = $("<div>");
+
+        console.log(response);
+
+        var cityName = response.name;
+
+        // Get today's date
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = mm + '/' + dd + '/' + yyyy;
+
+        // Get weather icon
+        // var weatherIcon = response.weather.0.icon;
+
+        var cityAndDate = $("<h2>").text(cityName + " " + today)
+        newDiv.append(cityAndDate);
+
+        // Get temperature and convert it to Farenheit from Kelvin
+        var temp = response.main.temp;
+        temp = ((temp - 273.15) * 1.80 + 32).toFixed(1);
+
+        var tempEl = $("<p>").text("Temperature: " + temp + " °F")
+        newDiv.append(tempEl);
+
+        // Get humidity
+        var humidity = response.main.humidity;
+        var humidityEl = $("<p>").text("Humidity: " + humidity);
+        newDiv.append(humidityEl);
+
+        // Get wind speed
+        var windSpeed = response.wind.speed;
+        var windEl = $("<p>").text("Wind Speed: " + windSpeed + " MPH");
+        newDiv.append(windEl);
+
+        // Get lat and lon to use for uv index api call
+        var lat = response.coord.lat;
+        var lon = response.coord.lon;
+
+        queryURL = "http://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=29f5bb53f0ad45eaf4e2242330886d7f";
+
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+
+            var uvIndex = response.value;
+            var uvEl = $("<p>").text("UV index: " + uvIndex);
+            newDiv.append(uvEl);
+
+        })
+
+        $(".current-forecast").append(newDiv);
+
+    })
+
+
+    queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=29f5bb53f0ad45eaf4e2242330886d7f";
 
     $.ajax({
         url: queryURL,
         method: "GET"
-    }).then(function(response) {
+    }).then(function (response) {
 
-        console.log(response)
+        // Create div to hold all attributes of today's forecast
+        var newDivFive = $("<div>");
+        $("#five-day-forecast").append(newDivFive);
 
-        // Display city name, date, weather condition icon, temperature humidity, wind speed, and uv index in .current-forecast
-        // Must create elements
-        var cityInfo = JSON.parse(response)
-        console.log(cityInfo)
-        var cityName = $("<div>");
-        cityName.text(cityInfo.name)
+        var fiveDay = $("<h2>").text("5-Day Forecast");
 
-        $("#current-forecast").append(cityName);
-        console.log(cityName)
+        newDivFive.append(fiveDay);
+
+        for (let i = 0; i < 5; i++) {
+            // Div representing each day
+            var dayHolder = $("<div>")
+
+            console.log(response);
+
+            // Get date
+
+            // Get temperature and convert it to Farenheit from Kelvin
+            var tempFive = response.list.i.main.temp;
+            tempFive = ((tempFive - 273.15) * 1.80 + 32).toFixed(1);
+
+            var tempElFive = $("<p>").text("Temperature: " + tempFive + " °F")
+            dayHolder.append(tempElFive);
+
+            // Get humidity
+            var humidityFive = response.list.i.main.humidity;
+            var humidityElFive = $("<p>").text("Humidity: " + humidityFive);
+            dayHolder.append(humidityElFive);
+
+            // Get wind speed
+            var windSpeedFive = response.list.i.wind.speed;
+            var windElFive = $("<p>").text("Wind Speed: " + windSpeedFive + " MPH");
+            dayHolder.append(windElFive);
+
+            // Get weather icon
+            // var weatherIcon = response.weather.0.icon;
+        }
+
+        newDivFive.append(dayHolder);
+
+
+
+
+
+
+
+
+
+
+
     })
+
+
+
+
+
+
+
+
+
+
 
 
 })
