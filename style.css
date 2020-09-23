@@ -11,6 +11,10 @@
     font-weight: bold;
 }
 
+.search-side {
+    margin-left: 0%;
+}
+
 /* Searchbar where user enters city */
 #searchbar {
     padding: 5px 2px;
@@ -20,4 +24,19 @@
 #search-label {
     font-size: 20px;
     font-weight: bold;
+}
+
+.current-forecast {
+    padding: 5px;
+    margin: 50px;
+    /* border: 20px; */
+    /* justify-content: center; */
+} 
+
+.day-holder {
+    padding: 10px;
+    background-color: blue;
+    color: white;
+    border: 5px;
+    margin: 5px;
 }

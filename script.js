@@ -31,8 +31,6 @@ $("#search-button").on("click", function (event) {
 
         // Get weather icon
         var weatherIcon = $("<img>").attr("src", "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png")
-        // wf += "<img src='https://openweathermap.org/img/w/" + val.weather[0].icon + ".png'>" // Icon
-
 
         newRow = $("<div>").attr("class", "row")
         newDiv.append(newRow);
@@ -86,28 +84,51 @@ $("#search-button").on("click", function (event) {
     })
 
 
+    // Display date, weather condition icon, temperature, and humidity in .five-day-forecast
+    // Also Display header "5-Day Forecast" 
     queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=29f5bb53f0ad45eaf4e2242330886d7f";
 
     $.ajax({
         url: queryURL,
         method: "GET"
-    }).then(function(data) {
+    }).then(function (data) {
 
-        
         // Create div to hold all attributes of today's forecast
         var newDivFive = $("<div>");
-    
+
         var fiveDay = $("<h2>").text("5-Day Forecast");
 
         newDivFive.append(fiveDay);
+        var newRowFive = $("<div>");
+        newRowFive.attr("class", "row");
+
+        // Used for calculating next 5 dates
+        var j = 0;
 
         for (let i = 3; i < 36; i += 8) {
             // Div representing each day
             var dayHolder = $("<div>")
+            dayHolder.attr("class", "day-holder")
+
+            j++
 
             console.log(data)
-            
+
             // Get date
+            // Get today's date
+            var date = new Date();
+            // Keep adding up the date
+            date.setDate(date.getDate() + j)
+            var dd = String(date.getDate()).padStart(2, '0');
+            var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = date.getFullYear();
+            date = mm + '/' + dd + '/' + yyyy;
+
+            dayHolder.append(date);
+
+            // Get weather icon
+            var weatherIconFive = $("<img>").attr("src", "https://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png")
+            dayHolder.append(weatherIconFive);
 
             // Get temperature and convert it to Farenheit from Kelvin
             var tempFive = data.list[i].main.temp;
@@ -127,13 +148,11 @@ $("#search-button").on("click", function (event) {
             var windElFive = $("<p>").text("Wind Speed: " + windSpeedFive + " MPH");
             dayHolder.append(windElFive);
 
-            newDivFive.append(dayHolder);
-
-            // Get weather icon
-            // var weatherIcon = response.weather.0.icon;
+            newRowFive.append(dayHolder);
         }
 
-        $("#five-day-forecast").append(newDivFive);
+        newDivFive.append(newRowFive);
+        $(".five-day-forecast").append(newDivFive);
 
     })
 
@@ -145,9 +164,6 @@ $("#search-button").on("click", function (event) {
 
 // Change background color of UV index depending on if conditions are favorable, moderate, or severe
 // Green for favorable, yellow for moderate, red for severe
-
-// Display date, weather condition icon, temperature, and humidity in .five-day-forecast
-// Also Display header "5-Day Forecast" 
 
 // Save searches to local storage, create each city to a button, and append it to page in .search-history
 // Only display last 8
