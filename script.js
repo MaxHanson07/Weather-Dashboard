@@ -1,17 +1,12 @@
 // Takes user input "city" and makes ajax call to weather api for both current conditions and 5-day forecast
-function searchCity() {
 
-
-
-}
-
-$("#search-button").on("click", function(event) {
+$("#search-button").on("click", function (event) {
     event.preventDefault();
     // This line of code will grab the input from the textbox
     var city = $("#city-input").val().trim();
     console.log(city);
 
-    var queryURL = "api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=29f5bb53f0ad45eaf4e2242330886d7f";
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=29f5bb53f0ad45eaf4e2242330886d7f";
 
 
     $.ajax({
@@ -20,15 +15,24 @@ $("#search-button").on("click", function(event) {
     }).then(function(response) {
 
         console.log(response)
+
+        // Display city name, date, weather condition icon, temperature humidity, wind speed, and uv index in .current-forecast
+        // Must create elements
+        var cityInfo = JSON.parse(response)
+        console.log(cityInfo)
+        var cityName = $("<div>");
+        cityName.text(cityInfo.name)
+
+        $("#current-forecast").append(cityName);
+        console.log(cityName)
     })
 
 
-    })
+})
 
 
 
-// Display city name, date, weather condition icon, temperature humidity, wind speed, and uv index in .current-forecast
-// Must create elements
+
 
 // Change background color of UV index depending on if conditions are favorable, moderate, or severe
 // Green for favorable, yellow for moderate, red for severe
